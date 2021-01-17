@@ -728,13 +728,10 @@ ParkBallMultiplier:
 	ret
 
 GetPokedexEntryBank:
-; This function is buggy.
-; It gets the wrong bank for Kadabra (64), Tauros (128), and Sunflora (192).
-; Uncomment the line below to fix this.
 	push hl
 	push de
 	ld a, [wEnemyMonSpecies]
-	; dec a
+	dec a
 	rlca
 	rlca
 	maskbits NUM_DEX_ENTRY_BANKS
@@ -898,13 +895,10 @@ MoonBallMultiplier:
 	inc hl
 	inc hl
 
-; Moon Stone's constant from Pokémon Red is used.
-; No Pokémon evolve with Burn Heal,
-; so Moon Balls always have a catch rate of 1×.
 	push bc
 	ld a, BANK("Evolutions and Attacks")
 	call GetFarByte
-	cp MOON_STONE_RED ; BURN_HEAL
+	cp MOON_STONE
 	pop bc
 	ret nz
 
@@ -963,7 +957,7 @@ LoveBallMultiplier:
 	pop de
 	cp d
 	pop bc
-	ret nz ; for the intended effect, this should be "ret z"
+	ret z
 
 	sla b
 	jr c, .max
@@ -983,11 +977,6 @@ LoveBallMultiplier:
 	ret
 
 FastBallMultiplier:
-; This function is buggy.
-; Intent:  multiply catch rate by 4 if enemy mon is in one of the three
-;          FleeMons tables.
-; Reality: multiply catch rate by 4 if enemy mon is one of the first three in
-;          the first FleeMons table.
 	ld a, [wTempEnemyMonSpecies]
 	ld c, a
 	ld hl, FleeMons
@@ -1001,7 +990,7 @@ FastBallMultiplier:
 	cp -1
 	jr z, .next
 	cp c
-	jr nz, .next ; for the intended effect, this should be "jr nz, .loop"
+	jr nz, .loop
 	sla b
 	jr c, .max
 

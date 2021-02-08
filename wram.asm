@@ -2261,6 +2261,11 @@ wHPBuffer2:: dw
 wHPBuffer3:: dw
 
 NEXTU
+; reusable TMs price buffer
+wBuffer1:: db
+wBuffer2:: db
+
+NEXTU
 ; HP bar animations
 wCurHPAnimMaxHP::   dw
 wCurHPAnimOldHP::   dw
